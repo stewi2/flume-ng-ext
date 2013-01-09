@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.apache.flume.source;
+package org.apache.flume.ext.source;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -24,6 +24,8 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.flume.Event;
+import org.apache.flume.ext.source.SyslogParser;
+import org.apache.flume.source.SyslogUtils;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Assert;
@@ -92,7 +94,6 @@ public class TestSyslogParser {
     messages.add("<165>1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"][examplePriority@32473 class=\"high\"]");
     
     for (String msg : messages) {
-    	System.out.println(msg);
       Event event = parser.parseMessage(msg, charset);
       Assert.assertNull("Failure to parse known-good syslog message",
           event.getHeaders().get(SyslogUtils.EVENT_STATUS));

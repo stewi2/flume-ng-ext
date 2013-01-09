@@ -1,11 +1,12 @@
-package org.apache.flume.interceptor;
+package org.apache.flume.ext.interceptor;
 
 import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
-import org.apache.flume.source.SyslogParser;
+import org.apache.flume.interceptor.Interceptor;
+import org.apache.flume.ext.source.SyslogParser;
 
 import com.google.common.collect.Lists;
 

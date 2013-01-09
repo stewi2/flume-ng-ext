@@ -1,4 +1,4 @@
-package org.apache.flume.source;
+package org.apache.flume.ext.source;
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
+import org.apache.flume.source.SyslogUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
