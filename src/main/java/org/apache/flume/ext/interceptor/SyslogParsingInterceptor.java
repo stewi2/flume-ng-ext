@@ -21,9 +21,15 @@ public class SyslogParsingInterceptor implements Interceptor {
 
 	@Override
 	public Event intercept(Event event) {
-		Event result = parser.parseMessage(new String(event.getBody(),Charset.forName("US-ASCII")), Charset.forName("UTF-8"));
-		event.setBody(result.getBody());
-		event.getHeaders().putAll(result.getHeaders());
+		try {
+			Event result = parser.parseMessage(new String(event.getBody(),Charset.forName("US-ASCII")), Charset.forName("UTF-8"));
+			event.setBody(result.getBody());
+			event.getHeaders().putAll(result.getHeaders());
+			event.getHeaders().put("parsable", "true");
+		} catch(IllegalArgumentException e) {
+			event.getHeaders().put("parsable", "false");
+		}
+		
 		return event;
 	}
 
