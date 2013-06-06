@@ -10,9 +10,17 @@ import org.apache.flume.ext.source.SyslogParser;
 
 import com.google.common.collect.Lists;
 
+import static org.apache.flume.ext.interceptor.SyslogParsingInterceptor.Constants.*;
+
 public class SyslogParsingInterceptor implements Interceptor {
 
 	SyslogParser parser;
+	
+	private boolean setParsable;
+	
+	public SyslogParsingInterceptor(boolean setParsable) {
+		this.setParsable = setParsable;
+	}
 	
 	@Override
 	public void initialize() {
@@ -26,7 +34,9 @@ public class SyslogParsingInterceptor implements Interceptor {
 			event.setBody(result.getBody());
 			event.getHeaders().putAll(result.getHeaders());
 		} catch(IllegalArgumentException e) {
-			event.getHeaders().put("parsable", "false");
+			if (this.setParsable == true)
+				event.getHeaders().put("parsable", "false");
+			else return null;
 		}
 		
 		return event;
@@ -52,16 +62,22 @@ public class SyslogParsingInterceptor implements Interceptor {
 	
 	public static class Builder implements Interceptor.Builder {
 
+		private boolean setParsable  = SET_PARSABLE_DFLT;
+		
 		@Override
 		public void configure(Context context) {
-			// TODO Auto-generated method stub
-			
+			this.setParsable = context.getBoolean(SET_PARSABLE, SET_PARSABLE_DFLT);
 		}
 
 		@Override
-		public Interceptor build() {
-			return new SyslogParsingInterceptor();
+		public Interceptor build() {			
+			return new SyslogParsingInterceptor(setParsable);
 		}
+	}
+	
+	public static class Constants {
+		public static String SET_PARSABLE = "setParsable";
+		public static boolean SET_PARSABLE_DFLT = false;
 	}
 
 }
