@@ -18,6 +18,7 @@
 
 package org.apache.flume.ext.source;
 
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
@@ -56,7 +57,7 @@ public class TestSyslogParser {
   }
 
   @Test
-  public void testMessageParsing() {
+  public void testMessageParsing() throws IOException {
     SyslogParser parser = new SyslogParser();
     Charset charset = Charsets.UTF_8;
     List<String> messages = Lists.newArrayList();
@@ -93,8 +94,15 @@ public class TestSyslogParser {
     // RFC 5424, structured data only, no message
     messages.add("<165>1 2003-10-11T22:14:15.003Z mymachine.example.com evntslog - ID47 [exampleSDID@32473 iut=\"3\" eventSource=\"Application\" eventID=\"1011\"][examplePriority@32473 class=\"high\"]");
     
+    messages.add("<13>1 2013-01-22T23:19:18+00:00 app1.pod2.sac1.zdsys.com rails - - - In 'remote_ip_address' HTTP_X_FORWARDED_FOR: [\"12.249.117.150\"]");
+    
+    messages.add("<13>1 2013-01-23T00:58:20+00:00 monitor01.ord.zdsys.com zendesk_classic - - - Zendesk::Search::Solr::Search.select took 0.114520265 seconds");
+    
     for (String msg : messages) {
       Event event = parser.parseMessage(msg, charset);
+      System.out.println(event);
+      System.out.write(event.getBody());
+      System.out.println();
       Assert.assertNull("Failure to parse known-good syslog message",
           event.getHeaders().get(SyslogUtils.EVENT_STATUS));
     }

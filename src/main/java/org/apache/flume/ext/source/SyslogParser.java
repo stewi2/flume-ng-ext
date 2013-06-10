@@ -1,4 +1,3 @@
-package org.apache.flume.ext.source;
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +20,7 @@ package org.apache.flume.ext.source;
  * and open the template in the editor.
  */
 
+package org.apache.flume.ext.source;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -185,8 +185,8 @@ public class SyslogParser {
     	if(nextSpace!=-1) {
 	    	String msgid = new String(msg.substring(curPos, nextSpace));
 	    	headers.put("msgid", msgid);
-	    	curPos = nextSpace + 1;
     	}
+    	curPos = nextSpace + 1;
 
     	// Structured Data
     	if(msg.charAt(curPos)!='-') {
@@ -217,6 +217,8 @@ public class SyslogParser {
     		}
     		
     		nextSpace+=1; // Skip the last space
+    	} else {
+			nextSpace = msg.indexOf(' ', curPos);
     	}
     }
 
